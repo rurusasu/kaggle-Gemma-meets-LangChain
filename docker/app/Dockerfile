@@ -7,7 +7,8 @@ ARG PYTHON_VERSION=3.11
 ARG APPLICATION_DIRECTORY=/home/${USER_NAME}/${PROJECT_NAME}
 
 # kaggle APIを利用するためのアカウントデータの仮想環境内での保存先
-ARG KAGGLE_CONFIG_DIR="/root/.kaggle/kaggle.json"
+ARG KAGGLE_CONFIG_DIR_PATH=/root/.kaggle
+ARG KAGGLE_CONFIG_DIR=${KAGGLE_CONFIG_DIR_PATH}/kaggle.json
 
 # Poetry のインストール
 #RUN curl -sSL https://install.python-poetry.org | python3 -
@@ -69,5 +70,8 @@ RUN apt-get update && \
 RUN apt-get autoremove -y && \
     apt-get -y clean && \
     rm -rf /var/lib/apt/lists/*
+
+# kaggle APIを利用するためのアカウントデータを仮想環境内に保存先
+COPY kaggle.json ${KAGGLE_CONFIG_DIR}
 
 WORKDIR ${APPLICATION_DIRECTORY}
